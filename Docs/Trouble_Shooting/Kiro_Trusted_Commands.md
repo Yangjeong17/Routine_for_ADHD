@@ -1,0 +1,11 @@
+npm *
+cat *
+npx *
+npx.cmd *
+node *
+/mnt/c/Program\ *
+"/mnt/c/Program *
+Start-Sleep *
+sleep *
+Get-Date *
+date *
