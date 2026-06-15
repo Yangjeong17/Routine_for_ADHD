@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import type { Block, DayValue, Priority } from '../types';
+import { useRef, useState, useEffect } from 'react';
+import type { Block, DayValue, Priority, CategoryColorMap } from '../types';
 import { CategoryCombobox } from './CategoryCombobox';
 import PriorityDropdown from './PriorityDropdown';
 
@@ -12,6 +12,7 @@ export interface BlockPopoverProps {
   onUpdateCategory: (category: string) => void;
   onUpdatePriority: (priority: Priority) => void;
   allCategories: string[];
+  categoryColorMap?: CategoryColorMap;
   onClose: () => void;
 }
 
@@ -30,6 +31,7 @@ export function BlockPopover({
   onUpdateCategory,
   onUpdatePriority,
   allCategories,
+  categoryColorMap: _categoryColorMap,
   onClose,
 }: BlockPopoverProps) {
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -80,13 +82,17 @@ export function BlockPopover({
         popoverRef.current &&
         !popoverRef.current.contains(event.target as Node)
       ) {
+        // select 드롭다운의 옵션 클릭은 팝오버 외부로 판단하지 않음
+        // (브라우저 네이티브 select는 document body에 렌더링되어 contains로 감지 불가)
+        const target = event.target as HTMLElement;
+        if (target.tagName === 'OPTION' || target.tagName === 'SELECT') return;
         onClose();
       }
     }
 
-    // mousedown으로 감지하여 즉시 닫힘
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    // mousedown 대신 click으로 감지 - select onChange가 먼저 처리된 후 닫힘
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, [onClose]);
 
   // Escape 키로 닫기
@@ -102,9 +108,10 @@ export function BlockPopover({
 
   // 중요도 라벨 매핑
   const priorityLabel: Record<Priority, string> = {
-    high: '높음',
-    medium: '보통',
-    low: '낮음',
+    urgent_important: '중요+긴급',
+    not_urgent_important: '중요+비긴급',
+    urgent_not_important: '비중요+긴급',
+    not_urgent_not_important: '비중요+비긴급',
   };
 
   return (

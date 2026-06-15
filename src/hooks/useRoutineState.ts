@@ -10,23 +10,12 @@ import { sampleRoutineData } from '../utils/sampleData';
 import { generateId } from '../utils/idGenerator';
 import { timeToMinutes } from '../utils/parser';
 
-type SaveStatus = 'saved' | 'saving';
+type SaveStatus = 'saving' | 'saved';
 
-/**
- * 해당 요일의 blocks를 start 시간 기준 오름차순으로 정렬한다.
- */
 function sortBlocksByStartTime(blocks: Block[]): Block[] {
-  return [...blocks].sort(
-    (a, b) => timeToMinutes(a.start) - timeToMinutes(b.start)
-  );
+  return [...blocks].sort((a, b) => timeToMinutes(a.start) - timeToMinutes(b.start));
 }
 
-/**
- * 루틴 상태 관리 커스텀 훅
- * - routineData, completionRecords 상태 관리
- * - 앱 시작 시 localStorage 로드, 샘플 데이터 폴백
- * - 블록 CRUD 및 완료 체크 핸들러 제공
- */
 export function useRoutineState() {
   const [routineData, setRoutineData] = useState<RoutineData | null>(null);
   const [completionRecords, setCompletionRecords] = useState<CompletionRecords>({});
@@ -257,6 +246,28 @@ export function useRoutineState() {
     [persistCompletionRecords]
   );
 
+  /**
+   * 특정 카테고리를 가진 모든 블록의 color 필드를 일괄 업데이트한다.
+   * App.tsx에서 카테고리 색상 변경 시 호출.
+   */
+  const updateCategoryColor = useCallback(
+    (category: string, newColor: string) => {
+      setRoutineData((prev) => {
+        if (!prev) return prev;
+        const updatedDays = prev.days.map((dayData) => ({
+          ...dayData,
+          blocks: dayData.blocks.map((block) =>
+            block.category === category ? { ...block, color: newColor } : block
+          ),
+        }));
+        const updatedData: RoutineData = { ...prev, days: updatedDays };
+        persistRoutineData(updatedData);
+        return updatedData;
+      });
+    },
+    [persistRoutineData]
+  );
+
   return {
     routineData,
     completionRecords,
@@ -266,5 +277,6 @@ export function useRoutineState() {
     updateBlock,
     deleteBlock,
     toggleCompletion,
+    updateCategoryColor,
   };
 }

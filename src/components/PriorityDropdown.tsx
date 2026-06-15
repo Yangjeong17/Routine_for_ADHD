@@ -5,12 +5,13 @@ interface PriorityDropdownProps {
   onChange: (priority: Priority) => void;
 }
 
-/** 중요도(high/medium/low) 선택 드롭다운 */
+/** 중요도(아이젠하워 매트릭스) 선택 드롭다운 */
 export default function PriorityDropdown({ value, onChange }: PriorityDropdownProps) {
   const options: { value: Priority; label: string }[] = [
-    { value: 'high', label: '높음' },
-    { value: 'medium', label: '보통' },
-    { value: 'low', label: '낮음' },
+    { value: 'urgent_important', label: '🔴 중요+긴급' },
+    { value: 'not_urgent_important', label: '🟢 중요+비긴급' },
+    { value: 'urgent_not_important', label: '🔵 비중요+긴급' },
+    { value: 'not_urgent_not_important', label: '⚪ 비중요+비긴급' },
   ];
 
   return (

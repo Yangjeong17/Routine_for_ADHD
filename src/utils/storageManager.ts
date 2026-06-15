@@ -1,7 +1,8 @@
-import type { RoutineData, CompletionRecords } from '../types';
+import type { RoutineData, CompletionRecords, CategoryColorMap } from '../types';
 
 const ROUTINE_DATA_KEY = 'routine-manager-current-routine';
 const COMPLETION_RECORDS_KEY = 'routine-manager-completion-records';
+const CATEGORY_COLOR_KEY = 'routine-manager-category-colors';
 
 /**
  * RoutineData를 localStorage에 저장한다.
@@ -74,7 +75,34 @@ export function clearAllData(): void {
   try {
     localStorage.removeItem(ROUTINE_DATA_KEY);
     localStorage.removeItem(COMPLETION_RECORDS_KEY);
+    localStorage.removeItem(CATEGORY_COLOR_KEY);
   } catch (error) {
     console.warn('데이터 삭제 실패:', error);
+  }
+}
+
+/**
+ * 카테고리별 커스텀 색상 맵을 localStorage에 저장한다.
+ */
+export function saveCategoryColors(colors: CategoryColorMap): void {
+  try {
+    localStorage.setItem(CATEGORY_COLOR_KEY, JSON.stringify(colors));
+  } catch (error) {
+    console.warn('CategoryColors 저장 실패:', error);
+  }
+}
+
+/**
+ * localStorage에서 카테고리별 커스텀 색상 맵을 불러온다.
+ * 없으면 빈 객체 반환.
+ */
+export function loadCategoryColors(): CategoryColorMap {
+  try {
+    const raw = localStorage.getItem(CATEGORY_COLOR_KEY);
+    if (!raw) return {};
+    return JSON.parse(raw) as CategoryColorMap;
+  } catch (error) {
+    console.warn('CategoryColors 로드 실패:', error);
+    return {};
   }
 }

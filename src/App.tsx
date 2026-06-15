@@ -1,10 +1,11 @@
-import { useState, useMemo } from 'react';
-import type { Block, DayValue, RoutineData } from './types';
+import { useState, useEffect, useMemo } from 'react';
+import type { Block, DayData, DayValue, RoutineData, CategoryColorMap } from './types';
 import { useRoutineState } from './hooks/useRoutineState';
 import { useWeekNavigation } from './hooks/useWeekNavigation';
-import { getWeekDates } from './utils/weekUtils';
+import { getWeekDates, formatDate } from './utils/weekUtils';
 import { parseRoutineJson } from './utils/parser';
 import { routineDataToJson } from './utils/prettyPrinter';
+import { saveCategoryColors, loadCategoryColors } from './utils/storageManager';
 import Header from './components/Header';
 import WeekNavigation from './components/WeekNavigation';
 import { TimelineGrid } from './components/TimelineGrid';
@@ -30,6 +31,7 @@ function App() {
     updateBlock,
     deleteBlock,
     toggleCompletion,
+    updateCategoryColor,
   } = useRoutineState();
 
   // 주간 네비게이션 훅
@@ -49,6 +51,25 @@ function App() {
     null
   );
 
+  // 카테고리 커스텀 색상 맵 (localStorage 연동)
+  const [categoryColorMap, setCategoryColorMap] = useState<CategoryColorMap>(() =>
+    loadCategoryColors()
+  );
+
+  /** 카테고리 색상 변경 - colorMap 저장 + 훅을 통해 블록 color 일괄 업데이트 */
+  function handleCategoryColorChange(category: string, newColor: string) {
+    const updated = { ...categoryColorMap, [category]: newColor };
+    setCategoryColorMap(updated);
+    saveCategoryColors(updated);
+    updateCategoryColor(category, newColor);
+  }
+
+  // useEffect가 없어도 useState 초기값으로 로드됨
+  useEffect(() => {
+    // 컴포넌트 마운트 시 최신 색상 맵 로드 (다른 탭 등에서 변경 시 동기화)
+    setCategoryColorMap(loadCategoryColors());
+  }, []);
+
   // --- 핸들러 ---
 
   /**
@@ -58,14 +79,14 @@ function App() {
   function handleImport(jsonString: string): { success: boolean; error?: string } {
     const result = parseRoutineJson(jsonString);
     if (!result.success) {
-      return { success: false, error: result.error };
+      return { success: false, error: (result as { success: false; error: string }).error };
     }
 
-    // 기존 데이터가 있으면 덮어쓰기 확인 다이얼로그 표시
+    // 기존 데이터가 있으면 ImportPanel을 닫고 덮어쓰기 확인 다이얼로그 표시
     if (routineData) {
       setPendingImportData(result.data);
+      setIsImportPanelOpen(false);
       setIsOverwriteDialogOpen(true);
-      // 패널은 열어둔 채로 다이얼로그 표시 (성공으로 반환하여 패널 닫기)
       return { success: true };
     }
 
@@ -91,22 +112,26 @@ function App() {
 
   /**
    * 블록 저장 (추가 또는 수정)
-   * - editingBlock이 있으면 수정 모드
-   * - 없으면 추가 모드
+   * - required=false(일회성)이면 weekStart를 현재 주로 설정 → 해당 주에만 표시
+   * - required=true(필수)이면 weekStart 없음 → 모든 주에 표시
    */
   function handleSaveBlock(
     dayValue: DayValue,
     blockData: Omit<Block, 'id' | 'duration_minutes'>,
     _originalDayValue?: DayValue
   ) {
+    // 일회성 블록이면 현재 선택된 주의 시작일을 기록
+    const finalBlockData: Omit<Block, 'id' | 'duration_minutes'> = {
+      ...blockData,
+      weekStart: blockData.required ? undefined : formatDate(selectedWeekStart),
+    };
+
     if (editingBlock) {
-      // 수정 모드: 요일 변경 여부 확인
       const newDayValue =
         dayValue !== editingBlock.dayValue ? dayValue : undefined;
-      updateBlock(editingBlock.dayValue, editingBlock.block.id, blockData, newDayValue);
+      updateBlock(editingBlock.dayValue, editingBlock.block.id, finalBlockData, newDayValue);
     } else {
-      // 추가 모드
-      addBlock(dayValue, blockData);
+      addBlock(dayValue, finalBlockData);
     }
     setIsEditorOpen(false);
     setEditingBlock(null);
@@ -135,21 +160,12 @@ function App() {
     setEditingBlock(null);
   }
 
-  /** 인라인 편집용 블록 업데이트 핸들러 (카테고리, 중요도 등) */
-  function handleUpdateBlockInline(dayValue: DayValue, blockId: string, updates: Partial<Block>) {
-    updateBlock(dayValue, blockId, updates);
-  }
-
   // 모든 블록에서 카테고리 수집 (중복 없이, 정렬)
   const allCategories = useMemo(() => {
     if (!routineData) return [];
-    const categories = new Set<string>();
-    routineData.days.forEach(day => {
-      day.blocks.forEach(block => {
-        if (block.category) categories.add(block.category);
-      });
-    });
-    return Array.from(categories).sort();
+    const cats = new Set<string>();
+    routineData.days.forEach((day: DayData) => day.blocks.forEach((b: Block) => { if (b.category) cats.add(b.category); }));
+    return Array.from(cats).sort();
   }, [routineData]);
 
   // --- 렌더링 ---
@@ -189,14 +205,25 @@ function App() {
         <TimelineGrid
           days={routineData.days}
           weekDates={weekDates}
+          selectedWeekStart={formatDate(selectedWeekStart)}
           completionRecords={completionRecords}
+          categoryColorMap={categoryColorMap}
           onToggleCompletion={toggleCompletion}
           onEditBlock={handleEditBlock}
           onDeleteBlock={handleDeleteBlock}
           onAddBlock={handleAddBlock}
-          onUpdateBlock={handleUpdateBlockInline}
         />
       </main>
+
+      {/* 우하단 플로팅 일정 추가 버튼 */}
+      <button
+        onClick={() => handleAddBlock('monday')}
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all flex items-center justify-center text-2xl"
+        aria-label="새 일정 추가"
+        title="새 일정 추가"
+      >
+        +
+      </button>
 
       {/* 모달/패널 */}
       <RoutineEditorModal
@@ -204,6 +231,9 @@ function App() {
         editingBlock={editingBlock}
         onSave={handleSaveBlock}
         onCancel={handleEditorCancel}
+        categoryColorMap={categoryColorMap}
+        onCategoryColorChange={handleCategoryColorChange}
+        allCategories={allCategories}
       />
 
       <ImportPanel

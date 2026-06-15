@@ -18,7 +18,13 @@ export function ImportPanel({ isOpen, onImport, onClose }: ImportPanelProps) {
   const [jsonText, setJsonText] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  if (!isOpen) return null;
+  /** 패널 닫기 시 상태 초기화 */
+  function handleClose() {
+    setJsonText('');
+    setError(null);
+    setIsDragOver(false);
+    onClose();
+  }
 
   /** 파일 파싱 후 onImport 호출 */
   async function handleFile(file: File) {
@@ -36,32 +42,7 @@ export function ImportPanel({ isOpen, onImport, onClose }: ImportPanelProps) {
     }
   }
 
-  /** 텍스트 가져오기 */
-  function handleTextImport() {
-    setError(null);
-    const result = onImport(jsonText);
-    if (!result.success) {
-      setError(result.error || '알 수 없는 오류가 발생했습니다');
-    } else {
-      handleClose();
-    }
-  }
-
-  /** 패널 닫기 시 상태 초기화 */
-  function handleClose() {
-    setJsonText('');
-    setError(null);
-    setIsDragOver(false);
-    onClose();
-  }
-
-  /** 텍스트 변경 시 오류 초기화 */
-  function handleTextChange(value: string) {
-    setJsonText(value);
-    if (error) setError(null);
-  }
-
-  // --- 드래그앤드롭 이벤트 핸들러 ---
+  // --- 드래그앤드롭 이벤트 핸들러 (모든 useCallback을 return null 앞에 배치) ---
 
   const handleDragEnter = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -85,12 +66,32 @@ export function ImportPanel({ isOpen, onImport, onClose }: ImportPanelProps) {
     e.preventDefault();
     e.stopPropagation();
     setIsDragOver(false);
-
     const files = e.dataTransfer.files;
     if (files.length > 0) {
       handleFile(files[0]);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // isOpen이 false면 Hooks 호출 이후에 return
+  if (!isOpen) return null;
+
+  /** 텍스트 가져오기 */
+  function handleTextImport() {
+    setError(null);
+    const result = onImport(jsonText);
+    if (!result.success) {
+      setError(result.error || '알 수 없는 오류가 발생했습니다');
+    } else {
+      handleClose();
+    }
+  }
+
+  /** 텍스트 변경 시 오류 초기화 */
+  function handleTextChange(value: string) {
+    setJsonText(value);
+    if (error) setError(null);
+  }
 
   /** 파일 선택 버튼 클릭 */
   function handleFileSelectClick() {
@@ -103,7 +104,6 @@ export function ImportPanel({ isOpen, onImport, onClose }: ImportPanelProps) {
     if (files && files.length > 0) {
       handleFile(files[0]);
     }
-    // input 값 초기화 (같은 파일 재선택 가능하도록)
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }

@@ -33,7 +33,22 @@ export const DAY_LABELS: Record<DayValue, string> = {
 };
 
 /** 유효한 priority 값 목록 */
-const VALID_PRIORITIES: Priority[] = ['high', 'medium', 'low'];
+const VALID_PRIORITIES: Priority[] = [
+  'urgent_important',
+  'not_urgent_important',
+  'urgent_not_important',
+  'not_urgent_not_important',
+];
+
+/**
+ * 구버전 priority 값(high/medium/low)을 4단계 아이젠하워 값으로 변환한다.
+ * 기존 JSON 파일과의 하위호환성을 유지하기 위해 사용.
+ */
+const LEGACY_PRIORITY_MAP: Record<string, Priority> = {
+  high:   'urgent_important',
+  medium: 'not_urgent_important',
+  low:    'not_urgent_not_important',
+};
 
 /**
  * 시간 형식(HH:mm) 유효성 검증
@@ -95,9 +110,13 @@ export function validateBlock(block: unknown, _dayLabel: string): string | null 
   }
 
   // 4. priority 값 확인 (제공된 경우에만)
+  // 구버전 high/medium/low 도 허용 (normalizeBlock에서 변환됨)
   if (blockObj.priority !== undefined && blockObj.priority !== null) {
-    if (!VALID_PRIORITIES.includes(blockObj.priority as Priority)) {
-      return 'priority는 high, medium, low 중 하나여야 합니다';
+    const p = blockObj.priority as string;
+    const isNewFormat = VALID_PRIORITIES.includes(p as Priority);
+    const isLegacyFormat = Object.keys(LEGACY_PRIORITY_MAP).includes(p);
+    if (!isNewFormat && !isLegacyFormat) {
+      return 'priority는 urgent_important, not_urgent_important, urgent_not_important, not_urgent_not_important 중 하나여야 합니다';
     }
   }
 
@@ -108,14 +127,14 @@ export function validateBlock(block: unknown, _dayLabel: string): string | null 
 const DEFAULT_COLOR = '#6B7280';
 
 /** 기본 priority 값 */
-const DEFAULT_PRIORITY: Priority = 'medium';
+const DEFAULT_PRIORITY: Priority = 'not_urgent_important';
 
 /**
  * 개별 블록에 기본값을 보정하여 완전한 Block 타입으로 변환한다.
  * - color: 없으면 "#6B7280"
  * - id: 없으면 generateId()로 자동 생성
  * - duration_minutes: start/end 기준으로 항상 재계산
- * - priority: 없으면 "medium"
+ * - priority: 없으면 "not_urgent_important"
  * - required: 없으면 false
  *
  * @param block - 검증을 통과한 raw 블록 객체
@@ -128,6 +147,13 @@ export function normalizeBlock(block: Record<string, unknown>): Block {
   // duration_minutes는 항상 start/end 기준으로 재계산
   const durationMinutes = timeToMinutes(end) - timeToMinutes(start);
 
+  const validPriorities: string[] = [
+    'urgent_important',
+    'not_urgent_important',
+    'urgent_not_important',
+    'not_urgent_not_important',
+  ];
+
   return {
     id: (typeof block.id === 'string' && block.id.length > 0) ? block.id : generateId(),
     title: block.title as string,
@@ -135,11 +161,16 @@ export function normalizeBlock(block: Record<string, unknown>): Block {
     start,
     end,
     duration_minutes: durationMinutes,
-    priority: (typeof block.priority === 'string' && (['high', 'medium', 'low'] as string[]).includes(block.priority))
-      ? (block.priority as Priority)
-      : DEFAULT_PRIORITY,
+    priority: (() => {
+      const p = block.priority as string | undefined;
+      if (!p) return DEFAULT_PRIORITY;
+      if (validPriorities.includes(p)) return p as Priority;
+      if (LEGACY_PRIORITY_MAP[p]) return LEGACY_PRIORITY_MAP[p];
+      return DEFAULT_PRIORITY;
+    })(),
     color: (typeof block.color === 'string' && block.color.length > 0) ? block.color : DEFAULT_COLOR,
     required: typeof block.required === 'boolean' ? block.required : false,
+    weekStart: typeof block.weekStart === 'string' ? block.weekStart : undefined,
     notes: typeof block.notes === 'string' ? block.notes : undefined,
   };
 }

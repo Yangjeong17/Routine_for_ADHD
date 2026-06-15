@@ -9,7 +9,11 @@ export type DayValue =
   | "saturday"
   | "sunday";
 
-export type Priority = "high" | "medium" | "low";
+export type Priority =
+  | "urgent_important"
+  | "not_urgent_important"
+  | "urgent_not_important"
+  | "not_urgent_not_important";
 
 export interface Block {
   id: string;
@@ -21,6 +25,7 @@ export interface Block {
   priority: Priority;
   color: string; // hex color
   required: boolean;
+  weekStart?: string; // YYYY-MM-DD (required=false 일 때 생성된 주 기록, 해당 주에만 표시)
   notes?: string;
 }
 
@@ -50,6 +55,9 @@ export type CompletionRecords = {
     [blockId: string]: boolean;
   };
 };
+
+/** 카테고리별 커스텀 색상 맵 (카테고리명 → hex 색상) */
+export type CategoryColorMap = Record<string, string>;
 
 export interface AppState {
   routineData: RoutineData | null;

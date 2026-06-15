@@ -1,0 +1,464 @@
+{
+  "routine_name": "차콩_주간루틴",
+  "version": "1.0",
+  "timezone": "Asia/Seoul",
+  "week_start": "2026-06-15",
+  "sleep": {
+    "target_bedtime": "23:30",
+    "target_wakeup": "07:00",
+    "flex_hours": 1
+  },
+  "goals": [
+    {
+      "id": 1,
+      "title": "재취업 (주당 지원 2건 목표)",
+      "priority": "urgent_important"
+    },
+    {
+      "id": 2,
+      "title": "다이어트: 체지방 감소 및 근력 향상",
+      "priority": "not_urgent_important"
+    }
+  ],
+  "days": [
+    {
+      "day": "monday",
+      "label": "월요일",
+      "blocks": [
+        {
+          "id": "mon-health-001",
+          "title": "아침 교정 스트레칭",
+          "category": "health",
+          "start": "08:10",
+          "end": "08:30",
+          "duration_minutes": 20,
+          "priority": "not_urgent_important",
+          "color": "#10B981",
+          "required": true,
+          "notes": "가벼운 목·어깨·골반 교정 스트레칭 20분"
+        },
+        {
+          "id": "mon-meal-001",
+          "title": "점심",
+          "category": "meal",
+          "start": "12:00",
+          "end": "12:30",
+          "duration_minutes": 30,
+          "priority": "urgent_not_important",
+          "color": "#F59E0B",
+          "required": true,
+          "notes": "단백질 목표 110g 고려, 탄수화물 70g 이내 유지"
+        },
+        {
+          "id": "mon-buffer-001",
+          "title": "운동 준비 / 휴식",
+          "category": "buffer",
+          "start": "18:45",
+          "end": "19:00",
+          "duration_minutes": 15,
+          "priority": "not_urgent_not_important",
+          "color": "#64748B",
+          "required": false,
+          "notes": "헬스장 이동 및 준비"
+        },
+        {
+          "id": "mon-fitness-001",
+          "title": "웨이트 A (하체 중심)",
+          "category": "fitness",
+          "start": "19:00",
+          "end": "20:15",
+          "duration_minutes": 75,
+          "priority": "not_urgent_important",
+          "color": "#10B981",
+          "required": true,
+          "notes": "힙 쓰러스트, 루마니안 데드, 스플릿 스쿼트 중심 + 폼롤링"
+        },
+        {
+          "id": "mon-health-002",
+          "title": "운동 후 스트레칭",
+          "category": "health",
+          "start": "20:15",
+          "end": "20:30",
+          "duration_minutes": 15,
+          "priority": "not_urgent_important",
+          "color": "#10B981",
+          "required": true,
+          "notes": "하체 중심 이완 스트레칭 10–15분"
+        },
+        {
+          "id": "mon-meal-002",
+          "title": "저녁/샤워",
+          "category": "meal",
+          "start": "20:30",
+          "end": "21:15",
+          "duration_minutes": 45,
+          "priority": "urgent_not_important",
+          "color": "#F59E0B",
+          "required": true,
+          "notes": "단백질 위주 식사, 물 2L 목표에 맞춰 수분 섭취"
+        },
+        {
+          "id": "mon-planning-001",
+          "title": "하루 회고 / 계획 정리",
+          "category": "planning",
+          "start": "21:30",
+          "end": "21:45",
+          "duration_minutes": 15,
+          "priority": "not_urgent_important",
+          "color": "#64748B",
+          "required": false,
+          "notes": "오늘 운동/식단/지원 현황 간단 메모"
+        }
+      ]
+    },
+    {
+      "day": "tuesday",
+      "label": "화요일",
+      "blocks": [
+        {
+          "id": "tue-health-001",
+          "title": "아침 교정 스트레칭",
+          "category": "health",
+          "start": "08:10",
+          "end": "08:30",
+          "duration_minutes": 20,
+          "priority": "not_urgent_important",
+          "color": "#10B981",
+          "required": true,
+          "notes": "아침 가벼운 교정 루틴"
+        },
+        {
+          "id": "tue-career-001",
+          "title": "공고 분석 / 지원 준비",
+          "category": "career",
+          "start": "10:00",
+          "end": "12:00",
+          "duration_minutes": 120,
+          "priority": "urgent_important",
+          "color": "#3B82F6",
+          "required": true,
+          "notes": "이번 주 지원 1건 목표: 이력서/자소서 맞춤 작성"
+        },
+        {
+          "id": "tue-meal-001",
+          "title": "점심",
+          "category": "meal",
+          "start": "12:00",
+          "end": "12:30",
+          "duration_minutes": 30,
+          "priority": "urgent_not_important",
+          "color": "#F59E0B",
+          "required": true,
+          "notes": "아토피 고려 식단"
+        },
+        {
+          "id": "tue-fitness-001",
+          "title": "저충격 유산소 + 코어",
+          "category": "fitness",
+          "start": "18:30",
+          "end": "19:35",
+          "duration_minutes": 65,
+          "priority": "not_urgent_important",
+          "color": "#10B981",
+          "required": true,
+          "notes": "실내자전거/엘립티컬 30–45분 중강도 + 코어·폼롤링 20분"
+        },
+        {
+          "id": "tue-meal-002",
+          "title": "저녁/샤워",
+          "category": "meal",
+          "start": "20:00",
+          "end": "20:40",
+          "duration_minutes": 40,
+          "priority": "urgent_not_important",
+          "color": "#F59E0B",
+          "required": true,
+          "notes": "저녁 단백질 중심"
+        },
+        {
+          "id": "tue-study-001",
+          "title": "파이썬 학습",
+          "category": "study",
+          "start": "21:00",
+          "end": "22:00",
+          "duration_minutes": 60,
+          "priority": "not_urgent_important",
+          "color": "#F59E0B",
+          "required": false,
+          "notes": "자료구조/데이터 처리 중심"
+        }
+      ]
+    },
+    {
+      "day": "wednesday",
+      "label": "수요일",
+      "blocks": [
+        {
+          "id": "wed-health-001",
+          "title": "아침 교정 스트레칭",
+          "category": "health",
+          "start": "08:10",
+          "end": "08:30",
+          "duration_minutes": 20,
+          "priority": "not_urgent_important",
+          "color": "#10B981",
+          "required": true,
+          "notes": "간단한 관절 가동성 운동"
+        },
+        {
+          "id": "wed-meal-001",
+          "title": "점심",
+          "category": "meal",
+          "start": "12:00",
+          "end": "12:30",
+          "duration_minutes": 30,
+          "priority": "urgent_not_important",
+          "color": "#F59E0B",
+          "required": true,
+          "notes": "점심 식사"
+        },
+        {
+          "id": "wed-fitness-001",
+          "title": "웨이트 B (상체 중심)",
+          "category": "fitness",
+          "start": "19:00",
+          "end": "20:00",
+          "duration_minutes": 60,
+          "priority": "not_urgent_important",
+          "color": "#10B981",
+          "required": true,
+          "notes": "로우, 벤치, 숄더 중심"
+        },
+        {
+          "id": "wed-fitness-002",
+          "title": "가벼운 유산소",
+          "category": "fitness",
+          "start": "20:00",
+          "end": "20:15",
+          "duration_minutes": 15,
+          "priority": "not_urgent_important",
+          "color": "#10B981",
+          "required": false,
+          "notes": "운동 후 쿨다운"
+        },
+        {
+          "id": "wed-study-001",
+          "title": "AWS/학습",
+          "category": "study",
+          "start": "21:00",
+          "end": "22:00",
+          "duration_minutes": 60,
+          "priority": "not_urgent_important",
+          "color": "#F59E0B",
+          "required": false,
+          "notes": "클라우드 개념 복습"
+        }
+      ]
+    },
+    {
+      "day": "thursday",
+      "label": "목요일",
+      "blocks": [
+        {
+          "id": "thu-health-001",
+          "title": "아침 교정 스트레칭",
+          "category": "health",
+          "start": "08:10",
+          "end": "08:30",
+          "duration_minutes": 20,
+          "priority": "not_urgent_important",
+          "color": "#10B981",
+          "required": true,
+          "notes": "가벼운 스트레칭"
+        },
+        {
+          "id": "thu-rest-001",
+          "title": "액티브 리커버리 (요가/스트레칭)",
+          "category": "rest",
+          "start": "19:00",
+          "end": "19:30",
+          "duration_minutes": 30,
+          "priority": "not_urgent_not_important",
+          "color": "#6B7280",
+          "required": false,
+          "notes": "유연성/회복 중심"
+        },
+        {
+          "id": "thu-career-001",
+          "title": "공고 분석 / 지원 (2차)",
+          "category": "career",
+          "start": "20:00",
+          "end": "22:00",
+          "duration_minutes": 120,
+          "priority": "urgent_important",
+          "color": "#3B82F6",
+          "required": true,
+          "notes": "주당 2건 목표의 2번째 지원 시간"
+        },
+        {
+          "id": "thu-meal-001",
+          "title": "저녁/샤워",
+          "category": "meal",
+          "start": "22:00",
+          "end": "22:30",
+          "duration_minutes": 30,
+          "priority": "urgent_not_important",
+          "color": "#F59E0B",
+          "required": true,
+          "notes": "저녁 정리"
+        }
+      ]
+    },
+    {
+      "day": "friday",
+      "label": "금요일",
+      "blocks": [
+        {
+          "id": "fri-health-001",
+          "title": "아침 교정 스트레칭",
+          "category": "health",
+          "start": "08:10",
+          "end": "08:30",
+          "duration_minutes": 20,
+          "priority": "not_urgent_important",
+          "color": "#10B981",
+          "required": true,
+          "notes": "아침 루틴"
+        },
+        {
+          "id": "fri-meal-001",
+          "title": "점심",
+          "category": "meal",
+          "start": "12:00",
+          "end": "12:30",
+          "duration_minutes": 30,
+          "priority": "urgent_not_important",
+          "color": "#F59E0B",
+          "required": true,
+          "notes": "식사"
+        },
+        {
+          "id": "fri-fitness-001",
+          "title": "웨이트 C (전신·라인 교정)",
+          "category": "fitness",
+          "start": "19:00",
+          "end": "20:15",
+          "duration_minutes": 75,
+          "priority": "not_urgent_important",
+          "color": "#10B981",
+          "required": true,
+          "notes": "케틀벨 스모 스쿼트, 힙·외측 강화 + 유산소 15분"
+        },
+        {
+          "id": "fri-planning-001",
+          "title": "주말 계획 정리 / 자유 시간 배치",
+          "category": "planning",
+          "start": "21:00",
+          "end": "21:20",
+          "duration_minutes": 20,
+          "priority": "not_urgent_important",
+          "color": "#64748B",
+          "required": false,
+          "notes": "주말 회복/취미 시간 배치"
+        }
+      ]
+    },
+    {
+      "day": "saturday",
+      "label": "토요일",
+      "blocks": [
+        {
+          "id": "sat-fitness-001",
+          "title": "저충격 인터벌 (자전거 HIIT)",
+          "category": "fitness",
+          "start": "09:30",
+          "end": "10:10",
+          "duration_minutes": 40,
+          "priority": "not_urgent_important",
+          "color": "#10B981",
+          "required": true,
+          "notes": "30–40분 인터벌 세션"
+        },
+        {
+          "id": "sat-meal-001",
+          "title": "점심",
+          "category": "meal",
+          "start": "12:30",
+          "end": "13:00",
+          "duration_minutes": 30,
+          "priority": "urgent_not_important",
+          "color": "#F59E0B",
+          "required": true,
+          "notes": "주말 식사"
+        },
+        {
+          "id": "sat-drawing-001",
+          "title": "창작 시간 (그림 등)",
+          "category": "drawing",
+          "start": "14:00",
+          "end": "17:00",
+          "duration_minutes": 180,
+          "priority": "not_urgent_not_important",
+          "color": "#EC4899",
+          "required": false,
+          "notes": "취미/스트레스 해소용"
+        },
+        {
+          "id": "sat-rest-001",
+          "title": "저녁 산책/휴식",
+          "category": "rest",
+          "start": "18:30",
+          "end": "19:15",
+          "duration_minutes": 45,
+          "priority": "not_urgent_not_important",
+          "color": "#6B7280",
+          "required": false,
+          "notes": "장시간 걷기 대신 가벼운 산책"
+        }
+      ]
+    },
+    {
+      "day": "sunday",
+      "label": "일요일",
+      "blocks": [
+        {
+          "id": "sun-fitness-001",
+          "title": "장시간 걷기 / 가벼운 조깅",
+          "category": "fitness",
+          "start": "08:30",
+          "end": "09:30",
+          "duration_minutes": 60,
+          "priority": "not_urgent_important",
+          "color": "#10B981",
+          "required": false,
+          "notes": "40–60분 회복성 유산소"
+        },
+        {
+          "id": "sun-meal-001",
+          "title": "점심",
+          "category": "meal",
+          "start": "12:00",
+          "end": "12:30",
+          "duration_minutes": 30,
+          "priority": "urgent_not_important",
+          "color": "#F59E0B",
+          "required": true,
+          "notes": "주말 식사"
+        },
+        {
+          "id": "sun-planning-001",
+          "title": "주간 리뷰",
+          "category": "planning",
+          "start": "20:00",
+          "end": "20:30",
+          "duration_minutes": 30,
+          "priority": "not_urgent_important",
+          "color": "#64748B",
+          "required": true,
+          "notes": "이번 주 목표 달성도(지원 건수, 운동 준수, 식단 준수) 기록"
+        }
+      ]
+    }
+  ],
+  "notes": "카테고리 값은 시스템 규칙에 맞춰 사용했습니다. priority 필드는 아이젠하워 매트릭스 4값만 사용했고, color는 각 카테고리 기본 색상으로 설정했습니다."
+}
