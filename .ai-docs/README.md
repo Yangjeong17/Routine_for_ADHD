@@ -9,6 +9,7 @@
 ├── .directions/            ← 사람 주도: 프로젝트 매니징 문서
 │   ├── overview/           ← 전체 목표, 아이디어, 디자인 방향
 │   ├── steps/              ← step별 기능 지시 (내가 자연어로 작성)
+│   │   └── cowork/         ← Cowork 대화 정리본 (Claude Code 지시용)
 │   ├── research/           ← 외부 정보, 오류 조사 결과
 │   └── references/         ← UI 레퍼런스, 참고 자료
 └── .ai-docs/               ← AI 협업 전용
@@ -33,6 +34,10 @@
    - 소규모 수정: `templates/spec_template_minor.md` 참고
 4. 스펙 확인 및 승인 후 구현 시작
 
+### Cowork → Claude Code 지시
+- Cowork(대화형 Claude)와 정리한 내용은 `.directions/steps/cowork/` 에 저장한다.
+- 해당 문서를 Claude Code에게 전달해 실제 구현을 지시한다.
+
 ### 세션 종료 시
 1. `templates/session_report_template.md` 프롬프트를 AI에게 전달
 2. AI가 생성한 세션 요약 → `logs/` 에 저장
@@ -48,6 +53,7 @@
 |-----------|------|-------------|
 | 기능 지시 | `.directions/steps/` | `step[N]_기능명.md` |
 | 수정 지시 | `.directions/steps/` | `step[N]-[N]_기능명_수정.md` |
+| Cowork 지시문 | `.directions/steps/cowork/` | `step[N]_cowork_기능명.md` |
 | 기능 스펙 | `.ai-docs/specs/` | `step[N]_기능명.md` (.directions와 1:1 대응) |
 | 세션 요약 | `.ai-docs/logs/` | `step[N]_session[N]_YYYYMMDD.md` |
 | 이슈 로그 | `.ai-docs/issues/` | `issue_step[N]_카테고리_YYYYMMDD.md` |

@@ -9,6 +9,7 @@ AI가 생성한 문서는 `.ai-docs/` 에 저장한다.
 .directions/
 ├── overview/      ← 프로젝트 전체 목표, 아이디어, 디자인 방향, 폴더 구조 등
 ├── steps/         ← step별 기능 지시 (자연어로 작성)
+│   └── cowork/    ← Cowork 대화 정리본 (Claude Code 지시용)
 ├── research/      ← 외부에서 가져온 정보, 오류 조사 결과, 사전 조사
 └── references/    ← UI 레퍼런스, 참고 자료, 디자인 예시
 ```
@@ -20,6 +21,7 @@ AI가 생성한 문서는 `.ai-docs/` 에 저장한다.
 | `overview/` | `주제.md` | `architecture.md`, `design_direction.md` |
 | `steps/` | `step[N]_기능명.md` | `step1_auth.md` |
 | `steps/` (수정) | `step[N]-[N]_기능명_수정.md` | `step1-1_auth_수정.md` |
+| `steps/cowork/` | `step[N]_cowork_기능명.md` | `step7_cowork_drag_edit.md` |
 | `research/` | `YYYYMMDD_주제.md` | `20260617_supabase_rls.md` |
 | `references/` | `YYYYMMDD_주제.md` | `20260617_calendar_ui.md` |
 
@@ -29,4 +31,6 @@ AI가 생성한 문서는 `.ai-docs/` 에 저장한다.
 2. AI에게 해당 파일 제공 → AI가 `.ai-docs/specs/` 에 스펙 작성
 3. 스펙 확인 후 승인 → 구현 시작
 
-> 이 폴더는 `.gitignore` 에 포함되어 git에서 제외된다.
+> `steps/cowork/` 는 Cowork(대화형 Claude)와 정리한 내용을 Claude Code에게 지시할 때 쓰는 정리본을 보관한다.
+
+> 표준 템플릿에서는 이 폴더를 `.gitignore` 로 제외하지만, 이 프로젝트는 공유·백업을 위해 `.directions/` 와 `.ai-docs/` 를 git에 함께 추적한다.

@@ -47,7 +47,7 @@ npm test
 
 문서는 두 영역으로 나뉜다.
 
-- `.directions/` — 내가 직접 작성하는 매니징 문서 (`steps/`에 자연어로 기능 지시)
+- `.directions/` — 내가 직접 작성하는 매니징 문서 (`steps/`에 자연어로 기능 지시, `steps/cowork/`에 Cowork 대화 정리본 → Claude Code 지시용)
 - `.ai-docs/` — AI가 작성하는 스펙(`specs/`), 세션 로그(`logs/`), 이슈(`issues/`), 산출물(`artifacts/`)
 
 세션 시작 시 `.directions/steps/step[N]_기능명.md`를 작성해 AI에게 전달하면, AI가 `.ai-docs/specs/`에 스펙을 작성하고 승인 후 구현한다. 세션 종료 시 `.ai-docs/templates/session_report_template.md` 프롬프트로 로그/이슈를 생성한다. 자세한 내용은 `.ai-docs/README.md` 참고.
