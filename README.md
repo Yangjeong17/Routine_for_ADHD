@@ -1,73 +1,53 @@
-# React + TypeScript + Vite
+# Routine_for_adhd
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> ADHD 사용자를 위한 주간 루틴 관리 웹앱. JSON을 붙여넣거나 파일로 가져와 24시간 시간축 그리드로 주간 루틴을 시각화하고, 블록을 추가·수정·삭제하며 날짜별 완료를 체크한다.
 
-Currently, two official plugins are available:
+## 프로젝트 구조
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+Routine_for_adhd/
+├── .directions/    ← 사람 주도 매니징 문서 (목표, step별 기능 지시, 조사·참고 자료)
+├── .ai-docs/       ← AI 협업 문서 (스펙, 세션 로그, 이슈, 템플릿, 산출물)
+├── .kiro/          ← Kiro IDE 스펙/스티어링 (원본 스펙 보관)
+├── src/            ← 소스 코드 (components, hooks, utils, types)
+├── index.html
+├── package.json
+├── .gitignore
+├── README.md
+└── CHANGELOG.md
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+> 테스트는 별도 `tests/` 폴더 없이 소스 옆에 `*.test.ts(x)` 형태로 같이 둔다(co-located).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 기술 스택
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- React 19 + TypeScript
+- Vite (개발 서버 / 빌드)
+- Tailwind CSS v4
+- Vitest + fast-check (단위 테스트 + 속성 기반 테스트)
+- 데이터 저장: 브라우저 localStorage (서버 없음)
+
+## 시작하기
+
+```bash
+# 의존성 설치
+npm install
+
+# 개발 서버 실행
+npm run dev
+
+# 프로덕션 빌드
+npm run build
+
+# 테스트 실행
+npm test
 ```
+
+## AI 협업 워크플로우
+
+문서는 두 영역으로 나뉜다.
+
+- `.directions/` — 내가 직접 작성하는 매니징 문서 (`steps/`에 자연어로 기능 지시)
+- `.ai-docs/` — AI가 작성하는 스펙(`specs/`), 세션 로그(`logs/`), 이슈(`issues/`), 산출물(`artifacts/`)
+
+세션 시작 시 `.directions/steps/step[N]_기능명.md`를 작성해 AI에게 전달하면, AI가 `.ai-docs/specs/`에 스펙을 작성하고 승인 후 구현한다. 세션 종료 시 `.ai-docs/templates/session_report_template.md` 프롬프트로 로그/이슈를 생성한다. 자세한 내용은 `.ai-docs/README.md` 참고.
